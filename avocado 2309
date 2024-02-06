@@ -1,0 +1,130 @@
+import numpy as np  # linear algebra
+import pandas as pd  # read and wrangle dataframes
+import matplotlib.pyplot as plt # visualization
+import seaborn as sns # statistical visualizations and aesthetics
+import requests
+
+df = pd.read_csv('https://raw.githubusercontent.com/abhijitshow07/Avocado-Price-Prediction-in-USA/master/avocado.csv')
+
+df.head()
+
+
+df.shape
+
+sns.heatmap(df.isnull().sum().to_frame())
+
+
+ Basic information about dataset
+
+df.info()
+
+df.isnull().sum()
+
+#lets check the null values again
+sns.heatmap(df.isnull(),cmap="cool_r")
+
+df.iloc[500,:]
+
+categorical_col = []
+for i in df.dtypes.index:
+    if df.dtypes[i]=="object":
+        categorical_col.append(i)
+        print("categorical coloum :",categorical_col)
+        print("\n")
+        
+        numerical_col = []
+for i in df.dtypes.index:
+    if df.dtypes[i]!="object":
+        numerical_col.append(i)
+        print("numerical coloum :",numerical_col)
+        print("\n")
+
+ # checking number of unique value in each coloumns
+df.nunique().to_fream ("N.of unique value")
+
+# Dropping Customer ID column
+df.dorp=("customer ID",axis=1== inplace=true)
+
+df=df.drop("Customer ID",axis=1)
+
+df.head()
+
+# Description of Dataset
+
+# statistical Summary of numerical columns
+df. describe ()
+
+# This gives the statistical information of the numerical columns. The summary of the dataset looks perfect since there is no negative/ incvalid
+
+# Data Visualization
+
+
+
+Univariate Analysis
+
+# visualize the number of region customer
+ax = sns.countplot(x='region',data=df)
+print(df['region'].value_counts())
+
+# we can observe that the count of 'no churn' are high compared to the count of 'yes churn' is there are more number of customers who have not churned. 
+This leads to class imbalance in the data we will rectify by using oversampling method in later part
+
+# visualizing the count of year
+ax = sns.countplot(x='year',data=df)
+print(df['year'].value_counts())
+plt.show()
+
+# visualize the number of type customer
+ax = sns.countplot(x='type',data=df)
+print(df['type'].value_counts())
+
+#let's check how the data has been distributed in remaining column
+plt.figure(figsize = (10,6), facecolor = "white")
+plotnumber = 1
+for col in numerical_col:
+    if plotnumber<=4:
+        ax = plt.subplot(2,2,plotnumber)
+        sns.distplot(df[col],color = "m")
+        plt.xlabel(col,fontsize = 12)
+        plt.yticks(rotation = 0, fontsize = 10)
+        plotnumber+=1
+        plt.tight_layout()
+
+# Bivariate Analysis
+
+# comparing tenure and seniorCitizen
+plt.title("Total Volume and region")
+sns.stripplot(x= "total volume", y = "region", data = df)
+plt.show()
+
+# feature scaling using standard scalariztion
+
+from sklearn.preprocessing import StandardScaler
+Scaler = standardScaler()
+x = pd.DataFrame(scaler.fit_transform(x),columns = x.columns)
+x
+
+# cheaking varience inflation fector (VIF)
+
+# finding varience inflation fector in each scaled column i.e, x.shape[1] (1/(1-R2))
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+vif = pd.DataFrame()
+vif["VIF values"] = [variance_inflation_(x.values,i) for i in range(len(x.columns))]
+vif ["features"] = x.columns
+vif
+
+# 
+
+
+
+# oversampline
+
+#oversampling the data
+!pip install imblearn
+from imblearn.over_sampling import SMOTE
+SM = SMOTE()
+x1,y1 = SM.fit_resample(x,y)
+
+# checking value count of target column
+y.value_counts()
+
